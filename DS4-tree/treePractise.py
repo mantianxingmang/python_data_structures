@@ -62,55 +62,100 @@
 '''
     分析树 ( 3 + （ 4 * 5 ）） => ['(','3','+','(','4','*','5',')',')']
 '''
-from pythonds.basic.stack import Stack
+# from pythonds.basic.stack import Stack
+# from pythonds.trees.binaryTree import BinaryTree
+# import operator
+
+# def buildParseTree(fpexp):
+#     fplist = fpexp.split()
+#     pStack = Stack()
+#     eTree = BinaryTree('')
+#     pStack.push(eTree)
+#     currentTree = eTree
+
+#     for i in fplist:
+#         if i == '(':
+#             currentTree.insertLeft('')
+#             pStack.push(currentTree)
+#             currentTree = currentTree.getLeftChild()
+#         elif i not in ['+','-','*','/',')']:
+#             currentTree.setRootVal(int(i))
+#             parent = pStack.pop()
+#             currentTree = parent
+#         elif i in ['+','-','*',"/"]:
+#             currentTree.setRootVal(i)
+#             currentTree.insertRight('')
+#             pStack.push(currentTree)
+#             currentTree = currentTree.getRightChild()
+#         elif i == ')':
+#             currentTree = pStack.pop()
+#         else:
+#             raise ValueError
+#     return eTree
+
+# def evaluate(parseTree):
+#     opers = {
+#         '+':operator.add,
+#         '-':operator.sub,
+#         '*':operator.mul,
+#         '/':operator.truediv
+#     }
+#     leftC = parseTree.getLeftChild()
+#     rightC = parseTree.getRightChild()
+
+#     if leftC and rightC:
+#         fn = opers[parseTree.getRootVal()]
+#         return fn(evaluate(leftC),evaluate(rightC))
+#     else:
+#         return parseTree.getRootVal()
+
+
+# pt = buildParseTree('( 3 + ( 4 * 5 ) )')
+# # pt.postorder()
+
+# print(evaluate(pt))
+
+
+'''
+    树的遍历
+'''
+# def preOrder(tree):
+#     if tree:
+#         print(tree.getRootVal())
+#         print(tree.getLeftChild())
+#         print(tree.getRightChild())
+
+# 前序
+def preOrder(self):
+    print(self.key)
+    if self.leftChild:
+        self.leftChild.preOrder()
+    if self.rightChild:
+        self.rightChild.preOrder()
+
+# 后序
+def postorder(tree):
+    if tree != None:
+        postorder(tree.getLeftChild())
+        postorder(tree.getRightChild())
+        print(tree.getRootVal())
+
 from pythonds.trees.binaryTree import BinaryTree
-import operator
-
-def buildParseTree(fpexp):
-    fplist = fpexp.split()
-    pStack = Stack()
-    eTree = BinaryTree('')
-    pStack.push(eTree)
-    currentTree = eTree
-
-    for i in fplist:
-        if i == '(':
-            currentTree.insertLeft('')
-            pStack.push(currentTree)
-            currentTree = currentTree.getLeftChild()
-        elif i not in ['+','-','*','/',')']:
-            currentTree.setRootVal(int(i))
-            parent = pStack.pop()
-            currentTree = parent
-        elif i in ['+','-','*',"/"]:
-            currentTree.setRootVal(i)
-            currentTree.insertRight('')
-            pStack.push(currentTree)
-            currentTree = currentTree.getRightChild()
-        elif i == ')':
-            currentTree = pStack.pop()
-        else:
-            raise ValueError
-    return eTree
-
-def evaluate(parseTree):
-    opers = {
-        '+':operator.add,
-        '-':operator.sub,
-        '*':operator.mul,
-        '/':operator.truediv
-    }
-    leftC = parseTree.getLeftChild()
-    rightC = parseTree.getRightChild()
-
-    if leftC and rightC:
-        fn = opers[parseTree.getRootVal()]
-        return fn(evaluate(leftC),evaluate(rightC))
-    else:
-        return parseTree.getRootVal()
+# 中序
+def inorder(tree):
+    if tree != None:
+        inorder(tree.getLeftChild())
+        print(tree.getRootVal())
+        inorder(tree.getRightChild())
 
 
-pt = buildParseTree('( 3 + ( 4 * 5 ) )')
-# pt.postorder()
 
-print(evaluate(pt))
+def printExp(tree):
+    sVal = ""
+    if tree:
+        sVal = '('+printExp(tree.getLeftChild())
+        sVal = sVal + str(tree.getRootVal())
+        sVal = sVal + printExp(tree.getRightChild())+')'
+    return sVal
+
+print(printExp(pt))
