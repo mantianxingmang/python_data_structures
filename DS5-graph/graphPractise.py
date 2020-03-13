@@ -106,15 +106,53 @@
     归类：
 '''
 
-from pythonds.graphs import Graph
+from pythonds.graphs import Graph,Vertex
+from pythonds.basic import Queue
 
 # wordFile 单词的文件
-def buildGraph(wordFile):
+def buildGraph(word):
     d = {}
+    g = Graph()
+    for n in range(len(word)):
+        bucket = word[:n]+"_"+word[n+1:]
+        if bucket in d:
+            d[bucket].append(word)
+        else:
+            d[bucket] = [word]
+    
+    for bucket in d.keys():
+        for word1 in d[bucket]:
+            for word2 in d[bucket]:
+                if word1 != word2:
+                    g.addEdge(word1,word2)
+    return g
 
-    wfile = open(wordFile,'r')
-    i = 0
-    for line in wfile:
-        if i%2 == 0:
-            word = line[:-1]
-            i = i+1
+g = buildGraph('FOOL')
+
+def bfs(g,start):
+    # 设置距离为0，前导为None
+    start.setDistance(0)
+    start.setPred(None)
+    vertQueue = Queue()
+    vertQueue.enqueue(start)
+
+    while(vertQueue.size()>0):
+        currentVert = vertQueue.dequeue()
+        for nbr in currentVert.getConnections():
+            if (nbr.getColor() == 'white'):
+                nbr.setColor('gray')
+                nbr.setDistance(currentVert.getDistance()+1)
+                nbr.setPred(currentVert)
+                vertQueue.enqueue(nbr)
+        currentVert.setColor('black')
+start = Vertex(0)
+print(bfs(g,start))
+
+def traverse(y):
+    x = y
+    while (x.getPred()):
+        print(x.getId())
+        x = x.getPred()
+    print(x.getId())
+
+# print(g.getVertex('FOOL'))
